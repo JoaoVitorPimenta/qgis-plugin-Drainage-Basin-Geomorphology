@@ -109,6 +109,9 @@ def calculateHypsometricCurve(demArray,noData,gt,proj,cols,rows,basin,absoluteVa
     if useOnlyDEMElev is True:
          distanceContour = None
 
+    if distanceContour == 0:
+        raise QgsProcessingException('The distance between contour lines cannot be 0.')
+
     if distanceContour is not None:
         elevationCurves = np.arange(minElevation, maxElevation, distanceContour)
 
@@ -194,7 +197,8 @@ def runHypsometricCurves(drainageBasinLayer,demLayer,pathCsv,pathHtml,absoluteVa
                                 x=cumulativeAreas,
                                 y=heights,
                                 mode='lines',
-                                name='basin id '+ str(basin.id())+' Integral = '+str(round(hypsometricIntegral[1],2))))
+                                name='basin id '+ str(basin.id())+' Integral = '+str(round(hypsometricIntegral[1],2)),
+                                showlegend = True))
 
         barProgress = int((idx + 1) * step)
         feedback.setProgress(barProgress)
